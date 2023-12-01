@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Box } from "@mui/material";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { Navbar } from "./components";
+import { Home, Login, Register, Posts } from "./pages";
+import { theme } from "./theme";
+import RequireAuth from "./features/auth/RequireAuth";
+import ProtectedWelcome from "./features/auth/ProtectedWelcome";
+
+const App = () => (
+  <div>
+    <BrowserRouter>
+      <Box>
+        <Navbar />
+        <Routes>
+          <Route path="/" exact_element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Register />} />
+          <Route path="/posts" element={<Posts />} />
+
+          <Route element={<RequireAuth />}>
+            <Route path="/protected" element={<ProtectedWelcome />} />
+          </Route>
+        </Routes>
+      </Box>
+    </BrowserRouter>
+  </div>
+);
 
 export default App;
