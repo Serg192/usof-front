@@ -1,4 +1,6 @@
 import { React, useRef, useState, useEffect } from "react";
+import { useRegisterMutation } from "../features/auth/authApiSlice";
+
 import {
   Stack,
   Paper,
@@ -52,7 +54,8 @@ const Register = () => {
   const [matchFocus, setMatchFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [respMsg, setRespMsg] = useState("");
+  const [registerSuccess, setRegisterSuccess] = useState(false);
 
   useEffect(() => {
     const result = REGEX.USER_LOGIN_REGEX.test(user);
@@ -84,9 +87,33 @@ const Register = () => {
     setValidMatch(match);
   }, [pwd, matchPwd]);
 
-  useEffect(() => {
-    setErrMsg("");
-  }, [user, email, fullName, pwd, matchPwd]);
+  // useEffect(() => {
+  //   setErrMsg("");
+  // }, [user, email, fullName, pwd, matchPwd]);
+
+  const [register, { isLoading }] = useRegisterMutation();
+
+  const handleFormSubmission = async () => {
+    try {
+      await register({
+        login: user,
+        password: pwd,
+        confirmPass: matchPwd,
+        email,
+        fullName,
+      }).unwrap();
+      setUser("");
+      setEmail("");
+      setPwd("");
+      setMatchPwd("");
+      setFullName("");
+      setRegisterSuccess(true);
+      setRespMsg("Success");
+    } catch (err) {
+      setRespMsg(err?.data?.message || "Registration failed");
+      setRegisterSuccess(false);
+    }
+  };
 
   return (
     <Stack
@@ -96,29 +123,32 @@ const Register = () => {
       mt="1h"
       sx={{ minHeigt: "100vh" }}
     >
-      {isLGScreen && <StackTraceAd height="95vh" width="60%" />}
+      {isLGScreen && <StackTraceAd height="100vh" width="60%" />}
 
       <Paper
         elevation={4}
-        sx={{ height: "95vh", width: { md: "500px", sm: "70%", xs: "90%" } }}
+        sx={{ height: "100vh", width: { md: "500px", sm: "70%", xs: "90%" } }}
       >
         <Stack direction="column" alignItems="center" p="20px" spacing="23px">
           <Typography variant="h3" sx={{ color: "primary.main", mb: "30px" }}>
             Sign up
           </Typography>
 
-          <Alert
-            severity="success"
-            sx={{ width: "95%", marginBottom: 2, fontSize: "16px" }}
-          >
-            This is an error alert — check it out!
-          </Alert>
+          {respMsg && (
+            <Alert
+              severity={registerSuccess ? "success" : "error"}
+              sx={{ width: "95%", marginBottom: 2, fontSize: "16px" }}
+            >
+              {respMsg}
+            </Alert>
+          )}
 
           <Stack direction="row" width="100%" alignItems="center">
             <TextField
               id="login"
               label="Login"
               variant="standard"
+              value={user}
               fullWidth
               sx={textInputSX}
               ref={userRef}
@@ -143,6 +173,7 @@ const Register = () => {
               id="fullName"
               label="Full Name"
               variant="standard"
+              value={fullName}
               fullWidth
               sx={textInputSX}
               InputLabelProps={labelProps}
@@ -166,6 +197,7 @@ const Register = () => {
               id="email"
               label="Email"
               variant="standard"
+              value={email}
               fullWidth
               sx={textInputSX}
               InputLabelProps={labelProps}
@@ -187,6 +219,7 @@ const Register = () => {
               id="password"
               label="Password"
               type="password"
+              value={pwd}
               variant="standard"
               fullWidth
               sx={textInputSX}
@@ -211,6 +244,7 @@ const Register = () => {
               id="confPass"
               label="Confirm password"
               type="password"
+              value={matchPwd}
               variant="standard"
               fullWidth
               sx={textInputSX}
@@ -251,6 +285,7 @@ const Register = () => {
                 validMatch
               )
             }
+            onClick={() => handleFormSubmission()}
             sx={{
               color: "white",
               backgroundColor: theme.palette.primary.light,

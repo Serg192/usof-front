@@ -1,7 +1,9 @@
 import React from "react";
 
 import { QuestionPreview } from "../components";
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
+import { theme } from "../theme";
+import { Link } from "react-router-dom";
 
 const questionData = {
   title: "I am a newbie here. How can I add a picture to my question?",
@@ -23,6 +25,22 @@ const Posts = () => {
       mt="30px"
       spacing="25px"
     >
+      <Link to="/newQuestion">
+        <Button
+          sx={{
+            color: "white",
+            backgroundColor: theme.palette.primary.light,
+            "&:hover": {
+              backgroundColor: theme.palette.primary.main,
+            },
+            textTransform: "none",
+            fontSize: "18px",
+          }}
+        >
+          Ask a question
+        </Button>
+      </Link>
+
       {arr.map((q) => (
         <QuestionPreview
           title={questionData.title}

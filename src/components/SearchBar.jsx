@@ -17,7 +17,7 @@ const SearchBar = () => {
           border: "2px solid #e3e3e3",
           boxShadow: "none",
           p: "1px 10px",
-          width: { md: "200px", lg: "600px", sx: "100px" },
+          width: { md: "200px", lg: "500px", sx: "100px" },
           "&:hover": {
             border: "2px solid #e3e3e3",
           },

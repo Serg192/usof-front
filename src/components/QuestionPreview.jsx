@@ -29,6 +29,10 @@ const QuestionPreview = ({
         flexDirection: "column",
         alignItems: "start",
         width: "50%",
+
+        "&:hover": {
+          transform: "scale(1.01)",
+        },
       }}
     >
       <Typography variant="h6" sx={{ mb: 1 }}>

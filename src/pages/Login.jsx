@@ -45,8 +45,8 @@ const Login = () => {
       if (!respStatus) {
         setErrMsg("No Server Response");
       } else if (respStatus === 400) {
-        console.log("Here");
-        setErrMsg(err?.data?.message);
+        console.log("Here", err);
+        setErrMsg(err?.data?.message || "Fields cannot be empty");
       } else if (respStatus === 401) {
         setErrMsg(err?.data?.message);
       } else {
