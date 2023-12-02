@@ -24,7 +24,7 @@ import { SearchBar, NavDrawerComp } from "./";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../features/auth/authApiSlice";
 import { UserProfileIcon } from "./";
-import { useGetUserQuery } from "../features/users/usersApiSlice";
+import { useGetUserMutation } from "../features/users/usersApiSlice";
 
 const navbarButtons = [
   { type: "tab", name: "Tags", link: "/" },
@@ -34,6 +34,7 @@ const navbarButtons = [
 
 const Navbar = () => {
   const [tab, setTab] = useState(0);
+  const [userImage, setUserImage] = useState("");
 
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   let loggedIn = useSelector(selectCurrentToken) != null;
@@ -43,8 +44,16 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useGetUserQuery(userId);
-  console.log();
+  const [getUser] = useGetUserMutation();
+
+  const loadUserImage = async () => {
+    const data = await getUser(userId);
+    setUserImage(data.data.user_profile_picture);
+  };
+
+  useEffect(() => {
+    if (loggedIn) loadUserImage();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -139,7 +148,7 @@ const Navbar = () => {
                 <Link to={"/"}>
                   <UserProfileIcon
                     size={40}
-                    image={`http://localhost:4545/profile-images/${data?.user_profile_picture}`}
+                    image={`http://localhost:4545/profile-images/${userImage}`}
                   />
                 </Link>
                 <Button

@@ -1,4 +1,5 @@
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
@@ -12,10 +13,12 @@ import {
 } from "@mui/material";
 import { ChooseCategory } from "../components";
 import React, { useEffect, useState } from "react";
+import { useCreatePostMutation } from "../features/posts/postsApiSlice";
 import { theme } from "../theme";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const labelProps = { style: { fontSize: "20px" } };
 const textInputSX = {
@@ -35,8 +38,14 @@ const AskQuestion = () => {
   const [displayTitleError, setDisplayTitleError] = useState(false);
   const [displayCategoryError, setDisplayCategoryError] = useState(false);
 
-  const handleSubmitQuestion = () => {
+  const [serverErrMsg, setServerErrMsg] = useState("");
+
+  const [createPost, { isLoading }] = useCreatePostMutation();
+  const navigate = useNavigate();
+
+  const handleSubmitQuestion = async () => {
     let valid = true;
+
     if (title.length < 10 || title.length >= 100) {
       setDisplayTitleError(true);
       valid = false;
@@ -51,7 +60,26 @@ const AskQuestion = () => {
     }
 
     if (valid) {
-      //Create Post and redirect to post page
+      const categoryIds = selectedCategories.map((cat) => cat.id);
+      //Create Post and redirect to post pa
+      try {
+        const postCreateAsw = await createPost({
+          title,
+          content,
+          categoryIds,
+        }).unwrap();
+        const createdPostId = postCreateAsw.post.id;
+        navigate(`/posts/${createdPostId}`);
+      } catch (err) {
+        const respStatus = err?.originalStatus;
+        if (!respStatus) {
+          setServerErrMsg("No server response");
+        } else if (respStatus === 400) {
+          setServerErrMsg("Bad request");
+        } else {
+          setServerErrMsg(err?.data?.message || "Server error");
+        }
+      }
     }
   };
 
@@ -73,6 +101,11 @@ const AskQuestion = () => {
         }}
       >
         <Stack direction="column" alignItems="center" width="100%">
+          {serverErrMsg && (
+            <Alert severity="error" sx={{ width: "95%", fontSize: "20px" }}>
+              {serverErrMsg}
+            </Alert>
+          )}
           <Typography variant="h4">Ask a question</Typography>
           <TextField
             label="Title"

@@ -1,15 +1,14 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
-export const userApiSlice = apiSlice.injectEndpoints({
+export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getUsers: builder.query.apply({
-      query: () => "/users",
-      keepUnusedDataFor: 5,
-    }),
-    getUser: builder.query({
-      query: (userId) => `/users/${userId}`,
+    getUser: builder.mutation({
+      query: (userId) => ({
+        url: `/users/${userId}`,
+        method: "GET",
+      }),
     }),
   }),
 });
 
-export const { useGetUsersQuery, useGetUserQuery } = userApiSlice;
+export const { useGetUserMutation } = usersApiSlice;

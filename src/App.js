@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Box } from "@mui/material";
 
 import { Navbar } from "./components";
-import { Home, Login, Register, Posts, AskQuestion } from "./pages";
+import { Home, Login, Register, Posts, AskQuestion, PostPage } from "./pages";
 import { theme } from "./theme";
 import RequireAuth from "./features/auth/RequireAuth";
 import ProtectedWelcome from "./features/auth/ProtectedWelcome";
@@ -18,6 +18,7 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
           <Route path="/posts" element={<Posts />} />
+          <Route path="/posts/:post_id" element={<PostPage />} />
 
           <Route element={<RequireAuth />}>
             <Route path="/protected" element={<ProtectedWelcome />} />
