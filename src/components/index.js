@@ -4,3 +4,4 @@ export { default as NavDrawerComp } from "./NavDrawerComp";
 export { default as StackTraceAd } from "./StackTraceAd";
 export { default as QuestionPreview } from "./QuestionPreview";
 export { default as UserProfileIcon } from "./UserProfileIcon";
+export { default as ChooseCategory } from "./ChooseCategory";
