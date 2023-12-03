@@ -15,7 +15,35 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    getPosts: builder.mutation({
+      query: (filterAndSearchOptions) => ({
+        url: `/posts?${filterAndSearchOptions}`,
+        method: "GET",
+      }),
+    }),
+
+    createPostComment: builder.mutation({
+      query: ({ postId, commentText }) => ({
+        url: `/posts/${postId}/comments`,
+        method: "POST",
+        body: { commentText },
+      }),
+    }),
+
+    getPostComments: builder.mutation({
+      query: (postId) => ({
+        url: `/posts/${postId}/comments`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useCreatePostMutation, useGetPostDataMutation } = postsApiSlice;
+export const {
+  useCreatePostMutation,
+  useGetPostDataMutation,
+  useGetPostsMutation,
+  useCreatePostCommentMutation,
+  useGetPostCommentsMutation,
+} = postsApiSlice;

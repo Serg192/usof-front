@@ -8,3 +8,7 @@ export { default as ChooseCategory } from "./ChooseCategory";
 export { default as PostView } from "./PostView";
 export { default as CategoryChip } from "./CategoryChip";
 export { default as Like } from "./Like";
+export { default as EditComment } from "./EditComment";
+export { default as CommentView } from "./CommentView";
+export { default as PublicationControlPanel } from "./PublicationControlPanel";
+export { default as ConfirmationDialog } from "./ConfirmationDialog";

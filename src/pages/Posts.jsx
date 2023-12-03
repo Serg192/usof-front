@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { QuestionPreview } from "../components";
 import { Button, Stack } from "@mui/material";
 import { theme } from "../theme";
 import { Link } from "react-router-dom";
+
+import { useGetPostsMutation } from "../features/posts/postsApiSlice";
+import { useState } from "react";
 
 const questionData = {
   title: "I am a newbie here. How can I add a picture to my question?",
@@ -15,6 +18,24 @@ const questionData = {
 };
 
 const Posts = () => {
+  const [getPosts] = useGetPostsMutation();
+
+  const [paginationInfo, setPaginationInfo] = useState({});
+  const [currentPosts, setcurrentPosts] = useState([]);
+
+  const loadPosts = async () => {
+    try {
+      const posts = await getPosts("").unwrap();
+      setPaginationInfo(posts.pagination);
+      console.log(posts.records);
+      setcurrentPosts(posts.records);
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
   let arr = [];
   for (let i = 0; i < 20; i++) arr.push(questionData);
   return (
@@ -41,16 +62,19 @@ const Posts = () => {
         </Button>
       </Link>
 
-      {arr.map((q) => (
-        <QuestionPreview
-          title={questionData.title}
-          author={questionData.author}
-          date={questionData.date}
-          categories={questionData.categories}
-          likes={questionData.likeCount}
-          comments={questionData.comments}
-        />
-      ))}
+      {currentPosts.length &&
+        currentPosts.map((p) => (
+          <QuestionPreview
+            title={p.post_title}
+            author={p.post_author.user_login}
+            author_img={p.post_author.user_profile_picture}
+            date={new Date(p.post_publish_date).toDateString()}
+            categories={p.post_categories}
+            likes={100}
+            comments={questionData.comments}
+            postId={p.id}
+          />
+        ))}
     </Stack>
   );
 };

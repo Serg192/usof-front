@@ -16,9 +16,7 @@ const PostView = ({ post }) => {
 
   const loadUserData = async () => {
     if (userId) {
-      console.log("ididididid:", userId);
       const userData = (await getUser(userId)).data;
-      console.log(userData);
       setUser(userData?.user_login);
       setUserPicture(userData?.user_profile_picture);
     }
@@ -66,7 +64,15 @@ const PostView = ({ post }) => {
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </Typography>
       </Stack>
-      <Divider sx={{ mt: "15px", width: "100%", borderWidth: "1.5px" }} />
+      <Divider
+        sx={{
+          mt: "18px",
+          width: "100%",
+          borderWidth: "5px",
+          backgroundColor: "primary.lighter",
+          borderRadius: "10px",
+        }}
+      />
     </Paper>
   );
 };

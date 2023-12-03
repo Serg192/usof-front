@@ -184,7 +184,9 @@ const AskQuestion = () => {
         </Box>
 
         <Stack sx={{ flex: "1", overflowY: "auto" }}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+          <Typography component="div" sx={{ fontSize: "18px", mt: "10px" }}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+          </Typography>
         </Stack>
       </Paper>
     </Stack>
