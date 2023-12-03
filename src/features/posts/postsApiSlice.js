@@ -37,6 +37,20 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    getPostLikes: builder.mutation({
+      query: (postId) => ({
+        url: `/posts/${postId}/like`,
+        method: "GET",
+      }),
+    }),
+    createLikeUnderPost: builder.mutation({
+      query: ({ postId, payload }) => ({
+        url: `/posts/${postId}/like`,
+        method: "POST",
+        body: { ...payload },
+      }),
+    }),
   }),
 });
 
@@ -46,4 +60,6 @@ export const {
   useGetPostsMutation,
   useCreatePostCommentMutation,
   useGetPostCommentsMutation,
+  useGetPostLikesMutation,
+  useCreateLikeUnderPostMutation,
 } = postsApiSlice;

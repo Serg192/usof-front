@@ -42,6 +42,7 @@ const PostPage = () => {
     try {
       const postData = await getPostData(post_id).unwrap();
       setPost({
+        id: postData.id,
         title: postData.post_title,
         date: new Date(postData.post_publish_date).toDateString(),
         content: postData.post_content,

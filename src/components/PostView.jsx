@@ -8,7 +8,8 @@ import Like from "./Like";
 import { useGetUserMutation } from "../features/users/usersApiSlice";
 
 const PostView = ({ post }) => {
-  const { title, date, content, categories, userId, likes, dislikes } = post;
+  const { id, title, date, content, categories, userId, likes, dislikes } =
+    post;
 
   const [getUser] = useGetUserMutation();
   const [user, setUser] = useState();
@@ -59,7 +60,7 @@ const PostView = ({ post }) => {
       </Stack>
       <Divider sx={{ mt: "15px", width: "100%", borderWidth: "1.5px" }} />
       <Stack direction="row" alignItems="center" spacing="30px">
-        <Like />
+        <Like postId={id} />
         <Typography component="div" sx={{ fontSize: "18px", mt: "10px" }}>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </Typography>
