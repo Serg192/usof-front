@@ -3,7 +3,12 @@ import React, { useEffect } from "react";
 import { FilterSidebar, PageController, QuestionPreview } from "../components";
 import { Button, Fab, Stack } from "@mui/material";
 import { theme } from "../theme";
-import { Link, useNavigate, useNavigation } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 
 import { useGetPostsMutation } from "../features/posts/postsApiSlice";
 import { useState } from "react";
@@ -30,6 +35,10 @@ const Posts = () => {
   const [openFilterOptions, setOpenFilterOptions] = useState(false);
 
   const token = useSelector(selectCurrentToken);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const searchValue = queryParams.get("search") || "";
+
   const navigate = useNavigate();
 
   const loadPosts = async () => {
@@ -50,12 +59,14 @@ const Posts = () => {
       categoryFilter = `&category=${categoryFilter}`;
     }
     try {
+      const searchAttr = `&search=${searchValue}`;
+      console.log("SEARCH: ", searchAttr);
       const posts = await getPosts(
         `page=${page}&limit=2&sortBy=${sortBy}&sortOrder=${sortOrder}${
           categoryFilter ? categoryFilter : ""
         }${onlyActivePosts ? "&status=active" : ""}${
           dateFilter ? dateFilter : ""
-        }`
+        }${searchValue.length > 0 ? searchAttr : ""}`
       ).unwrap();
       setPaginationInfo(posts.pagination);
       console.log(posts.records);
@@ -73,7 +84,15 @@ const Posts = () => {
 
   useEffect(() => {
     loadPosts();
-  }, [page, sortBy, sortOrder, onlyActivePosts, date, selectedCategories]);
+  }, [
+    page,
+    sortBy,
+    sortOrder,
+    onlyActivePosts,
+    date,
+    selectedCategories,
+    searchValue,
+  ]);
 
   return (
     <Stack

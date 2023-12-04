@@ -10,8 +10,8 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
 
     getUsers: builder.mutation({
-      query: () => ({
-        url: "/users",
+      query: (pagination) => ({
+        url: `/users?${pagination}`,
         method: "GET",
       }),
     }),

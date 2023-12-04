@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
+  const [searchValue, setSearchValue] = useState("");
+
+  const navigate = useNavigate();
+
+  const makeSearch = () => {
+    const attr = searchValue.length ? `?search=${searchValue}` : "";
+    navigate(`/posts${attr}`);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      makeSearch();
+    }
+  };
   return (
     <div>
       <TextField
@@ -22,6 +37,8 @@ const SearchBar = () => {
             border: "2px solid #e3e3e3",
           },
         }}
+        onKeyDown={handleKeyPress}
+        onChange={(e) => setSearchValue(e.target.value)}
         InputProps={{
           disableUnderline: true,
           endAdornment: (
@@ -29,10 +46,7 @@ const SearchBar = () => {
               aria-label="search"
               color="inherit"
               sx={{ p: 0 }}
-              onClick={() => {
-                // Handle search button click event
-                console.log("Search button clicked!");
-              }}
+              onClick={() => makeSearch()}
             >
               <SearchIcon />
             </IconButton>
