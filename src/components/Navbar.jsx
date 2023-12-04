@@ -29,12 +29,12 @@ import { useGetUserMutation } from "../features/users/usersApiSlice";
 const navbarButtons = [
   { type: "tab", name: "Tags", link: "/" },
   { type: "tab", name: "Posts", link: "/posts" },
-  { type: "tab", name: "About", link: "/" },
+  { type: "tab", name: "Users", link: "/users" },
 ];
 
 const Navbar = () => {
   const [tab, setTab] = useState(0);
-  const [userImage, setUserImage] = useState("");
+  const [userImage, setUserImage] = useState(undefined);
 
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
   let loggedIn = useSelector(selectCurrentToken) != null;
@@ -49,6 +49,7 @@ const Navbar = () => {
   const loadUserImage = async () => {
     const data = await getUser(userId);
     setUserImage(data.data.user_profile_picture);
+    console.log("NAVBAR IMAGE: ", data.data.user_profile_picture);
   };
 
   useEffect(() => {
@@ -145,12 +146,15 @@ const Navbar = () => {
               </>
             ) : (
               <Stack direction="row" spacing={5}>
-                <Link to={"/"}>
-                  <UserProfileIcon
-                    size={40}
-                    image={`http://localhost:4545/profile-images/${userImage}`}
-                  />
-                </Link>
+                {userImage && (
+                  <Link to={`/user/${userId}`}>
+                    <UserProfileIcon
+                      size={40}
+                      image={`http://localhost:4545/profile-images/${userImage}`}
+                    />
+                  </Link>
+                )}
+
                 <Button
                   onClick={() => handleLogout()}
                   color="inherit"

@@ -12,3 +12,6 @@ export { default as EditComment } from "./EditComment";
 export { default as CommentView } from "./CommentView";
 export { default as PublicationControlPanel } from "./PublicationControlPanel";
 export { default as ConfirmationDialog } from "./ConfirmationDialog";
+export { default as PageController } from "./PageController";
+export { default as FilterSidebar } from "./FilterSidebar";
+export { default as BasicDateRangePicker } from "./BasicDateRangePicker";

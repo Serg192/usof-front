@@ -39,7 +39,7 @@ const Login = () => {
       dispatch(setCredentials({ ...userData, user }));
       setUser("");
       setPwd("");
-      navigate("/protected");
+      navigate("/posts");
     } catch (err) {
       const respStatus = err?.status;
       if (!respStatus) {

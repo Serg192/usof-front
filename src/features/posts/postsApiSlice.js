@@ -51,6 +51,13 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         body: { ...payload },
       }),
     }),
+
+    deletePostLike: builder.mutation({
+      query: (postId) => ({
+        url: `/posts/${postId}/like`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -62,4 +69,5 @@ export const {
   useGetPostCommentsMutation,
   useGetPostLikesMutation,
   useCreateLikeUnderPostMutation,
+  useDeletePostLikeMutation,
 } = postsApiSlice;

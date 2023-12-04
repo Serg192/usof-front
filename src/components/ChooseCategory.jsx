@@ -59,7 +59,7 @@ const ChooseCategory = ({
       filterOptions={filterOptions}
       onChange={handleCategoryChange}
       onInputChange={(e) => {
-        setDisplayError(false);
+        setDisplayError && setDisplayError(false);
         handleUpdSearchCategories(e.target.value);
       }}
       renderInput={(params) => (

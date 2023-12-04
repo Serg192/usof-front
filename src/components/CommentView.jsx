@@ -17,7 +17,7 @@ const CommentView = ({ comment }) => {
       sx={{ width: { lg: "950px", md: "800px", xs: "95%" }, p: "10px" }}
     >
       <Stack direction="row" alignItems="center" spacing="30px">
-        <Like />
+        <Like commentId={id} />
         <Typography component="div" sx={{ fontSize: "18px", mt: "10px" }}>
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {comment_content}
