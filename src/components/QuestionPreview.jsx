@@ -16,6 +16,7 @@ const QuestionPreview = ({
   categories,
   postId,
   commentsCount,
+  status,
 }) => {
   return (
     <Paper
@@ -34,7 +35,7 @@ const QuestionPreview = ({
     >
       <Link to={`/posts/${postId}`}>
         <Typography variant="h6" sx={{ mb: 1 }}>
-          {title}
+          {title} {!status && "[closed]"}
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
           <Avatar

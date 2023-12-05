@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button, Drawer, IconButton, Divider } from "@mui/material";
+import { Button, Drawer, IconButton, Divider, Box } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -52,7 +52,7 @@ const NavDrawerComp = ({ tabs }) => {
         }}
       >
         {tabs.map((t) => (
-          <>
+          <Box key={t.id}>
             <Link to={`${t.link}`}>
               <Button
                 key={t.name}
@@ -63,7 +63,7 @@ const NavDrawerComp = ({ tabs }) => {
                 {t.name}
               </Button>
             </Link>
-          </>
+          </Box>
         ))}
         <Divider sx={{ mt: "40px" }} />
         {loggedIn ? (

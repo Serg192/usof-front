@@ -18,8 +18,22 @@ const CommentView = ({ comment }) => {
     >
       <Stack direction="row" alignItems="center" spacing="30px">
         <Like commentId={id} />
-        <Typography component="div" sx={{ fontSize: "18px", mt: "10px" }}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        <Typography
+          component="div"
+          sx={{ fontSize: "18px", mt: "10px", wordBreak: "break-all" }}
+        >
+          <ReactMarkdown
+            components={{
+              img: ({ node, ...props }) => (
+                <img
+                  {...props}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                />
+              ),
+            }}
+            remarkPlugins={[remarkGfm]}
+          >
             {comment_content}
           </ReactMarkdown>
         </Typography>

@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 
 import { Navbar } from "./components";
 import {
-  Home,
   Login,
   Register,
   Posts,
@@ -15,9 +14,7 @@ import {
   Tags,
   ResetPassword,
 } from "./pages";
-import { theme } from "./theme";
 import RequireAuth from "./features/auth/RequireAuth";
-import ProtectedWelcome from "./features/auth/ProtectedWelcome";
 
 const App = () => (
   <div>

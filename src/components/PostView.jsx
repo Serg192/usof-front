@@ -8,8 +8,19 @@ import Like from "./Like";
 import { useGetUserMutation } from "../features/users/usersApiSlice";
 
 const PostView = ({ post }) => {
-  const { id, title, date, content, categories, userId, likes, dislikes } =
-    post;
+  const {
+    id,
+    title,
+    date,
+    content,
+    categories,
+    userId,
+    likes,
+    dislikes,
+    status,
+  } = post;
+
+  console.log("STATUS: ", status);
 
   const [getUser] = useGetUserMutation();
   const [user, setUser] = useState();
@@ -31,7 +42,10 @@ const PostView = ({ post }) => {
       elevation={0}
       sx={{ width: { lg: "950px", md: "800px", xs: "95%" } }}
     >
-      <Typography variant="h2">{title}</Typography>
+      <Typography variant="h2">
+        {title}
+        {!status && " [closed]"}
+      </Typography>
       <Stack direction="row" spacing="10px" mt="10px" alignItems="center">
         {categories &&
           categories.map((category) => (
@@ -62,7 +76,20 @@ const PostView = ({ post }) => {
       <Stack direction="row" alignItems="center" spacing="30px">
         <Like postId={id} />
         <Typography component="div" sx={{ fontSize: "18px", mt: "10px" }}>
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+          <ReactMarkdown
+            components={{
+              img: ({ node, ...props }) => (
+                <img
+                  {...props}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                />
+              ),
+            }}
+            remarkPlugins={[remarkGfm]}
+          >
+            {content}
+          </ReactMarkdown>
         </Typography>
       </Stack>
       <Divider

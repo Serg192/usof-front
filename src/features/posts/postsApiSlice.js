@@ -72,6 +72,14 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+
+    changePostStatus: builder.mutation({
+      query: ({ postId, payload }) => ({
+        url: `/posts/${postId}/access`,
+        method: "POST",
+        body: { ...payload },
+      }),
+    }),
   }),
 });
 
@@ -86,4 +94,5 @@ export const {
   useDeletePostLikeMutation,
   useUpdatePostMutation,
   useDeletePostMutation,
+  useChangePostStatusMutation,
 } = postsApiSlice;

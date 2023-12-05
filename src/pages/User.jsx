@@ -8,14 +8,18 @@ import {
 import { Alert, Button, Stack, Typography } from "@mui/material";
 import {
   ConfirmationDialog,
+  LockPost,
   PublicationControlPanel,
   QuestionPreview,
   UserProfileIcon,
 } from "../components";
 import { theme } from "../theme";
 import { useSelector } from "react-redux";
-import { selectcurrentId } from "../features/auth/authSlice";
-import { useDeletePostMutation } from "../features/posts/postsApiSlice";
+import { selectCurrentRole, selectcurrentId } from "../features/auth/authSlice";
+import {
+  useChangePostStatusMutation,
+  useDeletePostMutation,
+} from "../features/posts/postsApiSlice";
 
 const btnStyle = {
   color: "white",
@@ -30,6 +34,7 @@ const btnStyle = {
 const User = () => {
   const { userId } = useParams();
   const appUser = useSelector(selectcurrentId);
+  const role = useSelector(selectCurrentRole);
 
   const [currentUser, setCurrentUser] = useState(null);
   const [currentPosts, setcurrentPosts] = useState([]);
@@ -42,6 +47,7 @@ const User = () => {
   const [getUserPosts] = useGetUserPostsMutation();
   const [uploadAvatar] = useUploadAvatarMutation();
   const [deletePost] = useDeletePostMutation();
+  const [changePostStatus] = useChangePostStatusMutation();
 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
@@ -57,6 +63,7 @@ const User = () => {
     try {
       const userPosts = await getUserPosts(userId).unwrap();
       setcurrentPosts(userPosts);
+      console.log("Current Posts:", userPosts);
     } catch (err) {}
   };
 
@@ -94,6 +101,16 @@ const User = () => {
     try {
       await deletePost(currentDeletePost).unwrap();
       setCurrentDeletePost(-1);
+      loadUserPosts();
+    } catch (err) {}
+  };
+
+  const handleChangePostStatus = async (postId, status) => {
+    try {
+      await changePostStatus({
+        postId,
+        payload: { active: status.toString() },
+      }).unwrap();
       loadUserPosts();
     } catch (err) {}
   };
@@ -203,16 +220,27 @@ const User = () => {
               dislikes={p.post_likes.length - p.like_count}
               commentsCount={p.post_comments.length}
               postId={p.id}
+              status={p.post_status}
             />
-            {appUser == userId && (
-              <PublicationControlPanel
-                onEdit={() => handlePostEdit(p.id)}
-                onDelete={() => {
-                  setShowConfirm(true);
-                  setCurrentDeletePost(p.id);
-                }}
-              />
-            )}
+            <Stack direction="column">
+              {appUser == userId && p.post_status && (
+                <PublicationControlPanel
+                  onEdit={() => handlePostEdit(p.id)}
+                  onDelete={() => {
+                    setShowConfirm(true);
+                    setCurrentDeletePost(p.id);
+                  }}
+                />
+              )}
+
+              {role === "admin" && (
+                <LockPost
+                  isActive={p.post_status}
+                  onActiveClicked={() => handleChangePostStatus(p.id, false)}
+                  onLockCliked={() => handleChangePostStatus(p.id, true)}
+                />
+              )}
+            </Stack>
           </Stack>
         ))}
     </Stack>

@@ -16,3 +16,4 @@ export { default as PageController } from "./PageController";
 export { default as FilterSidebar } from "./FilterSidebar";
 export { default as BasicDateRangePicker } from "./BasicDateRangePicker";
 export { default as Tag } from "./Tag";
+export { default as LockPost } from "./LockPost";

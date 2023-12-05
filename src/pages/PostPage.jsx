@@ -34,6 +34,7 @@ const PostPage = () => {
 
   const [editCommentId, setEditCommentId] = useState(undefined);
   const [currentDeleteComment, setCurrentDeleteComment] = useState();
+  const [postStatus, setPostStatus] = useState(true);
 
   let loggedIn = useSelector(selectCurrentToken) != null;
   const user_id = useSelector(selectcurrentId);
@@ -52,7 +53,9 @@ const PostPage = () => {
         userId: postData.user_id,
         likes: postData.likesCount,
         dislikes: postData.dislikesCount,
+        status: postData.post_status,
       });
+      setPostStatus(postData.post_status);
     } catch (err) {}
   };
 
@@ -112,7 +115,7 @@ const PostPage = () => {
 
       <PostView post={post} />
 
-      {loggedIn && !createComment && (
+      {loggedIn && !createComment && postStatus && (
         <Button
           onClick={() => setCreateComment(true)}
           sx={{
@@ -144,7 +147,7 @@ const PostPage = () => {
           {comments.map((c) => (
             <Stack direction="column">
               <Box alignSelf="end">
-                {user_id === c.comment_author.id && (
+                {user_id === c.comment_author.id && postStatus && (
                   <PublicationControlPanel
                     onEdit={() => handleEditComment(c.id)}
                     onDelete={() => {

@@ -158,6 +158,7 @@ const Posts = () => {
             dislikes={p.post_likes.length - p.like_count}
             commentsCount={p.post_comments.length}
             postId={p.id}
+            status={p.post_status}
           />
         ))}
       <PageController paginationInfo={paginationInfo} setPage={setPage} />
