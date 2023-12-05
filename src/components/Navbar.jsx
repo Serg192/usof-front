@@ -27,7 +27,7 @@ import { UserProfileIcon } from "./";
 import { useGetUserMutation } from "../features/users/usersApiSlice";
 
 const navbarButtons = [
-  { type: "tab", name: "Tags", link: "/" },
+  { type: "tab", name: "Tags", link: "/tags" },
   { type: "tab", name: "Posts", link: "/posts" },
   { type: "tab", name: "Users", link: "/users" },
 ];
@@ -54,7 +54,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (loggedIn) loadUserImage();
-  }, []);
+  }, [loggedIn]);
 
   const handleLogout = async () => {
     try {
@@ -146,15 +146,13 @@ const Navbar = () => {
               </>
             ) : (
               <Stack direction="row" spacing={5}>
-                {userImage && (
-                  <Link to={`/user/${userId}`}>
-                    <UserProfileIcon
-                      size={40}
-                      image={`http://localhost:4545/profile-images/${userImage}`}
-                    />
-                  </Link>
-                )}
-
+                <Link to={`/user/${userId}`}>
+                  <UserProfileIcon
+                    size={40}
+                    image={`http://localhost:4545/profile-images/${userImage}`}
+                  />
+                </Link>
+                )
                 <Button
                   onClick={() => handleLogout()}
                   color="inherit"

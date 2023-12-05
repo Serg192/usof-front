@@ -8,7 +8,14 @@ export const categoriesApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getAllCategories: builder.mutation({
+      query: (attr) => ({
+        url: `/categories?${attr}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useSearchCategoryMutation } = categoriesApiSlice;
+export const { useSearchCategoryMutation, useGetAllCategoriesMutation } =
+  categoriesApiSlice;

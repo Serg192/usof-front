@@ -15,3 +15,4 @@ export { default as ConfirmationDialog } from "./ConfirmationDialog";
 export { default as PageController } from "./PageController";
 export { default as FilterSidebar } from "./FilterSidebar";
 export { default as BasicDateRangePicker } from "./BasicDateRangePicker";
+export { default as Tag } from "./Tag";

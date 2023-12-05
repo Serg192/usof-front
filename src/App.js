@@ -12,6 +12,8 @@ import {
   PostPage,
   User,
   Users,
+  Tags,
+  ResetPassword,
 } from "./pages";
 import { theme } from "./theme";
 import RequireAuth from "./features/auth/RequireAuth";
@@ -23,17 +25,18 @@ const App = () => (
       <Box>
         <Navbar />
         <Routes>
-          <Route path="/" exact_element={<Home />} />
+          <Route index element={<Posts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
           <Route path="/posts" element={<Posts />} />
           <Route path="/posts/:post_id" element={<PostPage />} />
           <Route path="/user/:userId" element={<User />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/tags" element={<Tags />} />
+          <Route path="/passwordReset" element={<ResetPassword />} />
 
           <Route element={<RequireAuth />}>
-            <Route path="/protected" element={<ProtectedWelcome />} />
-            <Route path="/newQuestion" element={<AskQuestion />} />
+            <Route path="/question/:question_id" element={<AskQuestion />} />
           </Route>
         </Routes>
       </Box>

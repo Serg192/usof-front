@@ -50,6 +50,7 @@ const ChooseCategory = ({
 
   return (
     <Autocomplete
+      value={selectedCategories}
       id="category-chooser"
       options={availableCategories}
       getOptionLabel={(option) => option.name}

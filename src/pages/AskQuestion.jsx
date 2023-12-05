@@ -13,12 +13,16 @@ import {
 } from "@mui/material";
 import { ChooseCategory } from "../components";
 import React, { useEffect, useState } from "react";
-import { useCreatePostMutation } from "../features/posts/postsApiSlice";
+import {
+  useCreatePostMutation,
+  useGetPostDataMutation,
+  useUpdatePostMutation,
+} from "../features/posts/postsApiSlice";
 import { theme } from "../theme";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 const labelProps = { style: { fontSize: "20px" } };
 const textInputSX = {
@@ -28,6 +32,7 @@ const textInputSX = {
 };
 
 const AskQuestion = () => {
+  const { question_id } = useParams();
   const isMid = useMediaQuery(theme.breakpoints.up("md"));
 
   const [content, setContent] = useState("");
@@ -41,6 +46,7 @@ const AskQuestion = () => {
   const [serverErrMsg, setServerErrMsg] = useState("");
 
   const [createPost, { isLoading }] = useCreatePostMutation();
+  const [updatePost] = useUpdatePostMutation();
   const navigate = useNavigate();
 
   const handleSubmitQuestion = async () => {
@@ -61,15 +67,27 @@ const AskQuestion = () => {
 
     if (valid) {
       const categoryIds = selectedCategories.map((cat) => cat.id);
-      //Create Post and redirect to post pa
+
       try {
-        const postCreateAsw = await createPost({
-          title,
-          content,
-          categoryIds,
-        }).unwrap();
-        const createdPostId = postCreateAsw.post.id;
-        navigate(`/posts/${createdPostId}`);
+        if (question_id == 0) {
+          const postCreateAsw = await createPost({
+            title,
+            content,
+            categoryIds,
+          }).unwrap();
+          const createdPostId = postCreateAsw.post.id;
+          navigate(`/posts/${createdPostId}`);
+        } else {
+          const updatedPost = await updatePost({
+            postId: question_id,
+            payload: {
+              title,
+              content,
+              categoryIds,
+            },
+          }).unwrap();
+          navigate(`/posts/${question_id}`);
+        }
       } catch (err) {
         const respStatus = err?.originalStatus;
         if (!respStatus) {
@@ -82,6 +100,23 @@ const AskQuestion = () => {
       }
     }
   };
+
+  const [getPostData] = useGetPostDataMutation();
+  const loadQuestion = async () => {
+    try {
+      const postData = await getPostData(question_id).unwrap();
+      setTitle(postData.post_title);
+      setContent(postData.post_content);
+      const categories = postData.postCategories.map((cat) => {
+        return { id: cat.category_id, name: cat.category_title };
+      });
+      setSelectedCategories(categories);
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    if (question_id != 0) loadQuestion();
+  }, [question_id]);
 
   return (
     <Stack
@@ -106,7 +141,9 @@ const AskQuestion = () => {
               {serverErrMsg}
             </Alert>
           )}
-          <Typography variant="h4">Ask a question</Typography>
+          <Typography variant="h4">
+            {question_id == 0 ? "Ask a question" : "Edit question"}
+          </Typography>
           <TextField
             label="Title"
             value={title}

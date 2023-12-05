@@ -6,3 +6,5 @@ export { default as AskQuestion } from "./AskQuestion";
 export { default as PostPage } from "./PostPage";
 export { default as User } from "./User";
 export { default as Users } from "./Users";
+export { default as Tags } from "./Tags";
+export { default as ResetPassword } from "./ResetPassword";

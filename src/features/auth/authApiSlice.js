@@ -16,6 +16,13 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: { ...userData },
       }),
     }),
+    passwordReset: builder.mutation({
+      query: (payload) => ({
+        url: "/auth/password-reset",
+        method: "POST",
+        body: { ...payload },
+      }),
+    }),
     logout: builder.mutation({
       query: () => ({
         url: "/auth/logout",
@@ -25,5 +32,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } =
-  authApiSlice;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLogoutMutation,
+  usePasswordResetMutation,
+} = authApiSlice;

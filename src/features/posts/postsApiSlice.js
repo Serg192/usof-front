@@ -9,6 +9,13 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         body: { ...payload },
       }),
     }),
+    updatePost: builder.mutation({
+      query: ({ postId, payload }) => ({
+        url: `/posts/${postId}`,
+        method: "POST",
+        body: { ...payload },
+      }),
+    }),
     getPostData: builder.mutation({
       query: (postId) => ({
         url: `/posts/${postId}`,
@@ -58,6 +65,13 @@ export const postsApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
       }),
     }),
+
+    deletePost: builder.mutation({
+      query: (postId) => ({
+        url: `/posts/${postId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -70,4 +84,6 @@ export const {
   useGetPostLikesMutation,
   useCreateLikeUnderPostMutation,
   useDeletePostLikeMutation,
+  useUpdatePostMutation,
+  useDeletePostMutation,
 } = postsApiSlice;

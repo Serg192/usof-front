@@ -46,7 +46,9 @@ const Like = ({ postId, commentId }) => {
           commentId,
           payload: { type: type.toString() },
         }).unwrap();
-      } catch (err) {}
+      } catch (err) {
+        console.log("Can't like my own comment");
+      }
     }
     loadLikesData();
   };
@@ -66,7 +68,9 @@ const Like = ({ postId, commentId }) => {
         }).unwrap();
 
         // loadLikesUnderPost();
-      } catch (err) {}
+      } catch (err) {
+        console.log("Can't like my own post");
+      }
     }
     //loadLikesUnderPost();
     loadLikesData();

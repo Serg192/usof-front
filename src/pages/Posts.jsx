@@ -62,7 +62,7 @@ const Posts = () => {
       const searchAttr = `&search=${searchValue}`;
       console.log("SEARCH: ", searchAttr);
       const posts = await getPosts(
-        `page=${page}&limit=2&sortBy=${sortBy}&sortOrder=${sortOrder}${
+        `page=${page}&limit=5&sortBy=${sortBy}&sortOrder=${sortOrder}${
           categoryFilter ? categoryFilter : ""
         }${onlyActivePosts ? "&status=active" : ""}${
           dateFilter ? dateFilter : ""
@@ -76,7 +76,7 @@ const Posts = () => {
 
   const newQuestion = () => {
     if (token) {
-      navigate("/newQuestion");
+      navigate("/question/0");
     } else {
       navigate("/login");
     }

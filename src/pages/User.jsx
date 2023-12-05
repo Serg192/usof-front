@@ -1,15 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useGetUserMutation,
   useGetUserPostsMutation,
   useUploadAvatarMutation,
 } from "../features/users/usersApiSlice";
 import { Alert, Button, Stack, Typography } from "@mui/material";
-import { QuestionPreview, UserProfileIcon } from "../components";
+import {
+  ConfirmationDialog,
+  PublicationControlPanel,
+  QuestionPreview,
+  UserProfileIcon,
+} from "../components";
 import { theme } from "../theme";
 import { useSelector } from "react-redux";
 import { selectcurrentId } from "../features/auth/authSlice";
+import { useDeletePostMutation } from "../features/posts/postsApiSlice";
 
 const btnStyle = {
   color: "white",
@@ -29,12 +35,16 @@ const User = () => {
   const [currentPosts, setcurrentPosts] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [displayUploadErr, setDisplayUploadErr] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [currentDeletePost, setCurrentDeletePost] = useState(-1);
 
   const [getUser] = useGetUserMutation();
   const [getUserPosts] = useGetUserPostsMutation();
   const [uploadAvatar] = useUploadAvatarMutation();
+  const [deletePost] = useDeletePostMutation();
 
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   const loadCurrentUser = async () => {
     try {
@@ -76,6 +86,18 @@ const User = () => {
     }
   };
 
+  const handlePostEdit = (postId) => {
+    navigate(`/question/${postId}`);
+  };
+
+  const handleDeletePost = async () => {
+    try {
+      await deletePost(currentDeletePost).unwrap();
+      setCurrentDeletePost(-1);
+      loadUserPosts();
+    } catch (err) {}
+  };
+
   useEffect(() => {
     loadCurrentUser();
     loadUserPosts();
@@ -90,6 +112,20 @@ const User = () => {
       mb="30px"
       spacing="25px"
     >
+      {showConfirm && (
+        <ConfirmationDialog
+          text={"Do you really want to delete this comment?"}
+          onClose={() => {
+            setShowConfirm(false);
+            setCurrentDeletePost(-1);
+          }}
+          onConfirm={() => {
+            setShowConfirm(false);
+            handleDeletePost();
+          }}
+        />
+      )}
+
       <UserProfileIcon
         name={currentUser?.user_login}
         rating={currentUser?.user_rating}
@@ -148,19 +184,36 @@ const User = () => {
       <Typography color="primary.light" variant="h4">
         User posts:
       </Typography>
+
       {currentPosts.length &&
         currentPosts.map((p) => (
-          <QuestionPreview
-            title={p.post_title}
-            author={p.post_author.user_login}
-            author_img={p.post_author.user_profile_picture}
-            date={new Date(p.post_publish_date).toDateString()}
-            categories={p.post_categories}
-            likes={p.like_count}
-            dislikes={p.post_likes.length - p.like_count}
-            commentsCount={p.post_comments.length}
-            postId={p.id}
-          />
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            sx={{ width: "100%" }}
+          >
+            <QuestionPreview
+              title={p.post_title}
+              author={p.post_author.user_login}
+              author_img={p.post_author.user_profile_picture}
+              date={new Date(p.post_publish_date).toDateString()}
+              categories={p.post_categories}
+              likes={p.like_count}
+              dislikes={p.post_likes.length - p.like_count}
+              commentsCount={p.post_comments.length}
+              postId={p.id}
+            />
+            {appUser == userId && (
+              <PublicationControlPanel
+                onEdit={() => handlePostEdit(p.id)}
+                onDelete={() => {
+                  setShowConfirm(true);
+                  setCurrentDeletePost(p.id);
+                }}
+              />
+            )}
+          </Stack>
         ))}
     </Stack>
   );

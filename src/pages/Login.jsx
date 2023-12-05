@@ -114,15 +114,18 @@ const Login = () => {
               Do not have an account? Sign up
             </Typography>
           </Link>
-          <Typography
-            variant="h6"
-            sx={{
-              color: "primary.light",
-              "&:hover": { color: "primary.main" },
-            }}
-          >
-            If you for got you password click here
-          </Typography>
+          <Link to="/passwordReset">
+            <Typography
+              variant="h6"
+              sx={{
+                color: "primary.light",
+                "&:hover": { color: "primary.main" },
+              }}
+            >
+              If you for got you password click here
+            </Typography>
+          </Link>
+
           <Button
             onClick={() => handleSubmit()}
             sx={{
