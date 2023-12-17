@@ -4,7 +4,7 @@ Q&A platform
 
 ---
 
-##Preview:
+## Preview:
 
 ### Sign up
 
